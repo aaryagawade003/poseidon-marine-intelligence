@@ -48,9 +48,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="ATLANTIS",
-    description="Satellite Oil Spill Detection, Drift Prediction & AIS Attribution Platform",
-    version="1.0.0",
+    title="POSEIDON Marine Intelligence",
+    description="Satellite oil-spill detection, drift reconstruction and AIS vessel correlation platform.",
+    version="2.0.0",
     lifespan=lifespan,
 )
 
@@ -62,7 +62,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount all feature routers under /api
 app.include_router(health.router, prefix="/api", tags=["health"])
 app.include_router(dashboard.router, prefix="/api", tags=["dashboard"])
 app.include_router(satellite.router, prefix="/api", tags=["satellite"])
@@ -96,7 +95,7 @@ def get_official_sitrep_pdf():
         sitrep_path,
         media_type="application/pdf",
         filename="Indian_Coast_Guard_MSC_ELSA_3_SITREP.pdf",
-        headers={"Content-Disposition": 'inline; filename="Indian_Coast_Guard_MSC_ELSA_3_SITREP.pdf"'}
+        headers={"Content-Disposition": 'inline; filename="Indian_Coast_Guard_MSC_ELSA_3_SITREP.pdf"'},
     )
 
 
@@ -135,5 +134,3 @@ def download_report(filename: str):
     if not path.exists():
         raise HTTPException(status_code=404, detail="Report file not found.")
     return FileResponse(path, media_type="application/pdf", filename=safe)
-
-
