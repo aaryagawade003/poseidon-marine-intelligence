@@ -5,262 +5,142 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Root & Typography ─────────────────────────────────────────────────── */
+:root {
+  --ocean-950: #17324d;
+  --ocean-900: #214a69;
+  --ocean-800: #28658b;
+  --ocean-700: #3289bd;
+  --ocean-600: #4ea8de;
+  --ocean-500: #67c5f5;
+  --sky-100: #eaf5ff;
+  --sky-50: #f7fcff;
+  --line: #c7e3f7;
+}
+
 html, body, #root {
   height: 100%;
-  background-color: #070c18;
-  color: #f1f5f9;
+  background: var(--sky-100);
+  color: var(--ocean-950);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   overflow: hidden;
 }
 
-/* ─── Scrollbars ─────────────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.4); }
-::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.2); border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.4); }
+button, select, input { font-family: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
 
-/* ─── Leaflet Map ─────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #e7f3fb; }
+::-webkit-scrollbar-thumb { background: #a8d4ed; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #72b8df; }
+
 .leaflet-container {
-  background: #081020;
+  background: #cfeafb;
   font-family: 'Inter', sans-serif;
 }
 .leaflet-control-zoom a {
-  background: rgba(13, 23, 42, 0.92) !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
-  color: #94a3b8 !important;
+  background: rgba(255,255,255,0.94) !important;
+  border-color: #b9def3 !important;
+  color: #28658b !important;
 }
 .leaflet-control-zoom a:hover {
-  background: rgba(56, 189, 248, 0.15) !important;
-  color: #e2e8f0 !important;
+  background: #e6f6ff !important;
+  color: #164b6b !important;
 }
 .leaflet-control-attribution {
-  background: rgba(7, 12, 24, 0.75) !important;
-  color: #475569 !important;
+  background: rgba(255,255,255,0.82) !important;
+  color: #6b879c !important;
   font-size: 9px !important;
 }
-.leaflet-control-attribution a { color: #64748b !important; }
+.leaflet-control-attribution a { color: #3289bd !important; }
 
-/* ─── Leaflet Popup (Dark Theme) ─────────────────────────────────────────── */
 .leaflet-popup-content-wrapper {
-  background: rgba(9, 16, 32, 0.97) !important;
+  background: rgba(255,255,255,0.97) !important;
   backdrop-filter: blur(16px) !important;
-  border: 1px solid rgba(56, 189, 248, 0.22) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(56,189,248,0.08) !important;
-  color: #e2e8f0 !important;
+  border: 1px solid #b9def3 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 20px 40px rgba(42,105,145,0.18) !important;
+  color: #17324d !important;
   padding: 0 !important;
 }
 .leaflet-popup-content { margin: 10px 14px !important; line-height: 1.45 !important; }
 .leaflet-popup-tip-container { display: none !important; }
 
-/* ─── Wind Vector Field Animation ────────────────────────────────────────── */
 @keyframes vectorDrift {
-  0%   { opacity: 0.5; transform: translateY(0px); }
-  50%  { opacity: 1.0; transform: translateY(-5px); filter: drop-shadow(0 0 4px currentColor); }
-  100% { opacity: 0.4; transform: translateY(-10px); }
+  0% { opacity: .45; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-5px); filter: drop-shadow(0 0 4px currentColor); }
+  100% { opacity: .4; transform: translateY(-10px); }
 }
-.marine-vector-flow {
-  animation: vectorDrift 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  transform-origin: center;
-  display: inline-block;
-}
+.marine-vector-flow { animation: vectorDrift 2.4s cubic-bezier(.4,0,.2,1) infinite; transform-origin: center; display: inline-block; }
 
-/* ─── Radar Pulse (slick centroid) ───────────────────────────────────────── */
 @keyframes radarPulse {
-  0%   { transform: scale(0.8); opacity: 0.9; }
-  60%  { transform: scale(1.5); opacity: 0.3; }
-  100% { transform: scale(2.0); opacity: 0; }
+  0% { transform: scale(.8); opacity: .9; }
+  60% { transform: scale(1.5); opacity: .3; }
+  100% { transform: scale(2); opacity: 0; }
 }
 .animate-radar-pulse { animation: radarPulse 2.5s ease-out infinite; }
 
-/* ─── Forecast Slick Dotted Pulse ────────────────────────────────────────── */
-@keyframes forecastPulse {
-  0%, 100% { opacity: 0.6; }
-  50%       { opacity: 1.0; }
-}
+@keyframes forecastPulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
 .forecast-slick-pulse { animation: forecastPulse 3s ease-in-out infinite; }
 
-/* ─── Glass Panels ───────────────────────────────────────────────────────── */
 .glass-panel {
-  background: rgba(10, 18, 38, 0.80);
+  background: rgba(255,255,255,.84);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(148, 163, 184, 0.10);
+  border: 1px solid rgba(90,160,200,.20);
+  box-shadow: 0 10px 30px rgba(45,111,150,.08);
 }
 .glass-panel-cyan {
-  background: rgba(8, 20, 42, 0.88);
+  background: rgba(247,252,255,.94);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(56, 189, 248, 0.18);
-  box-shadow: 0 8px 24px -8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(56,189,248,0.06);
+  border: 1px solid rgba(78,168,222,.30);
+  box-shadow: 0 12px 30px rgba(45,111,150,.10), inset 0 1px 0 rgba(255,255,255,.9);
 }
 
-/* ─── Timeline Slider (Time Machine) ─────────────────────────────────────── */
 .timeline-slider {
   -webkit-appearance: none;
   appearance: none;
   height: 6px;
   border-radius: 9999px;
-  background: linear-gradient(to right,
-    rgba(139, 92, 246, 0.35) 0%,
-    rgba(139, 92, 246, 0.35) var(--t0-pos, 33.3%),
-    rgba(244, 63, 94, 0.6) var(--t0-pos, 33.3%),
-    rgba(244, 63, 94, 0.6) calc(var(--t0-pos, 33.3%) + 0.5%),
-    rgba(14, 116, 144, 0.35) calc(var(--t0-pos, 33.3%) + 0.5%),
-    rgba(14, 116, 144, 0.35) 100%
-  );
+  background: linear-gradient(to right, #b8ddf1 0%, #b8ddf1 var(--t0-pos,33.3%), #f2a4a4 var(--t0-pos,33.3%), #f2a4a4 calc(var(--t0-pos,33.3%) + .5%), #a8d9ef calc(var(--t0-pos,33.3%) + .5%), #a8d9ef 100%);
   outline: none;
   cursor: pointer;
 }
-.timeline-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #fff;
-  border: 3px solid #06b6d4;
-  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.25), 0 2px 8px rgba(0,0,0,0.5);
-  cursor: pointer;
-  transition: box-shadow 0.15s;
-}
-.timeline-slider::-webkit-slider-thumb:hover {
-  box-shadow: 0 0 0 5px rgba(6, 182, 212, 0.35), 0 2px 8px rgba(0,0,0,0.5);
-}
-.timeline-slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #fff;
-  border: 3px solid #06b6d4;
-  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.25);
-  cursor: pointer;
-}
+.timeline-slider::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:#fff; border:3px solid #4ea8de; box-shadow:0 0 0 3px rgba(78,168,222,.20),0 2px 8px rgba(44,101,135,.20); cursor:pointer; }
+.timeline-slider::-moz-range-thumb { width:18px; height:18px; border-radius:50%; background:#fff; border:3px solid #4ea8de; box-shadow:0 0 0 3px rgba(78,168,222,.20); cursor:pointer; }
 
-/* ─── KPI Chip Animation ─────────────────────────────────────────────────── */
-@keyframes chipEntrance {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.kpi-chip { animation: chipEntrance 0.3s ease-out forwards; }
+@keyframes chipEntrance { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+.kpi-chip { animation: chipEntrance .3s ease-out forwards; }
+.marine-ship-marker, .marine-vector-marker { background:transparent !important; border:none !important; }
 
-/* ─── Vessel Marker ──────────────────────────────────────────────────────── */
-.marine-ship-marker { background: transparent !important; border: none !important; }
-.marine-vector-marker { background: transparent !important; border: none !important; }
+@keyframes alertSlide { from { transform:translateY(-100%); opacity:0; } to { transform:translateY(0); opacity:1; } }
+.alert-banner { animation: alertSlide .35s ease-out; }
 
-/* ─── Alert Banner ───────────────────────────────────────────────────────── */
-@keyframes alertSlide {
-  from { transform: translateY(-100%); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
-}
-.alert-banner { animation: alertSlide 0.35s ease-out; }
+.sidebar-section { border-bottom:1px solid rgba(80,140,175,.14); padding-bottom:10px; margin-bottom:10px; }
+.sidebar-section:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
 
-/* ─── Sidebar Sections ───────────────────────────────────────────────────── */
-.sidebar-section {
-  border-bottom: 1px solid rgba(148, 163, 184, 0.07);
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-}
-.sidebar-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.score-bar { height:4px; border-radius:9999px; background:linear-gradient(to right,#67c5f5,#3289bd); transition:width .6s cubic-bezier(.4,0,.2,1); }
 
-/* ─── Attribution Score Bar ─────────────────────────────────────────────── */
-.score-bar {
-  height: 3px;
-  border-radius: 9999px;
-  background: linear-gradient(to right, #06b6d4, #f43f5e);
-  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
+.map-hud-chip { background:rgba(255,255,255,.90); border:1px solid rgba(78,168,222,.25); backdrop-filter:blur(10px); border-radius:9px; padding:4px 10px; font-size:11px; color:#45667d; font-family:'JetBrains Mono',monospace; white-space:nowrap; box-shadow:0 4px 14px rgba(45,111,150,.08); }
+.layer-toggle input[type="checkbox"] { accent-color:#4ea8de; width:14px; height:14px; cursor:pointer; }
 
-/* ─── Map HUD Overlay Elements ───────────────────────────────────────────── */
-.map-hud-chip {
-  background: rgba(7, 12, 24, 0.85);
-  border: 1px solid rgba(56, 189, 248, 0.18);
-  backdrop-filter: blur(10px);
-  border-radius: 8px;
-  padding: 4px 10px;
-  font-size: 11px;
-  color: #94a3b8;
-  font-family: 'JetBrains Mono', monospace;
-  white-space: nowrap;
-}
+.inv-tab-active { background:rgba(78,168,222,.14); color:#2478aa; border-bottom:2px solid #4ea8de; }
+.inv-tab { color:#6b879c; border-bottom:2px solid transparent; transition:all .15s; }
+.inv-tab:hover { color:#28658b; }
 
-/* ─── Layer Toggle Checkbox ──────────────────────────────────────────────── */
-.layer-toggle input[type="checkbox"] {
-  accent-color: #06b6d4;
-  width: 14px;
-  height: 14px;
-  cursor: pointer;
-}
+.rank-1 { background:#fff0f0; color:#b04b4b; border-color:#f0c6c6; }
+.rank-2 { background:#fff8e8; color:#9a7219; border-color:#f3dfad; }
+.rank-3 { background:#eaf7ff; color:#2478aa; border-color:#b9def3; }
+.rank-n { background:#f1f7fa; color:#6b879c; border-color:#d5e6ef; }
 
-/* ─── Investigation Panel Tabs ───────────────────────────────────────────── */
-.inv-tab-active {
-  background: rgba(6, 182, 212, 0.15);
-  color: #06b6d4;
-  border-bottom: 2px solid #06b6d4;
-}
-.inv-tab {
-  color: #64748b;
-  border-bottom: 2px solid transparent;
-  transition: all 0.15s;
-}
-.inv-tab:hover { color: #94a3b8; }
+@keyframes incidentFloat { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4px); } }
+.incident-float { animation:incidentFloat 3s ease-in-out infinite; }
 
-/* ─── Suspect Rank Badge ─────────────────────────────────────────────────── */
-.rank-1 { background: rgba(244, 63, 94, 0.2); color: #fda4af; border-color: rgba(244,63,94,0.4); }
-.rank-2 { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border-color: rgba(245,158,11,0.35); }
-.rank-3 { background: rgba(56, 189, 248, 0.1); color: #7dd3fc; border-color: rgba(56,189,248,0.25); }
-.rank-n { background: rgba(100, 116, 139, 0.1); color: #94a3b8; border-color: rgba(100,116,139,0.2); }
+.leaflet-overlay-pane canvas { position:absolute !important; top:0 !important; left:0 !important; pointer-events:none; }
 
-/* ─── Live Mode Specific Animations ─────────────────────────────────────── */
-@keyframes satelliteScan {
-  0%   { transform: translateY(-100%); opacity: 0; }
-  10%  { opacity: 0.8; }
-  90%  { opacity: 0.8; }
-  100% { transform: translateY(100vh); opacity: 0; }
-}
-.satellite-scan-beam {
-  animation: satelliteScan 6s linear infinite;
-  background: linear-gradient(to bottom, transparent, rgba(34,211,238,0.12), transparent);
-}
-
-@keyframes globePulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(34,211,238,0.4), 0 0 0 0 rgba(34,211,238,0.2); }
-  50%       { box-shadow: 0 0 0 12px rgba(34,211,238,0), 0 0 0 24px rgba(34,211,238,0); }
-}
-.globe-pulse { animation: globePulse 2s ease-out infinite; }
-
-@keyframes incidentFloat {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-4px); }
-}
-.incident-float { animation: incidentFloat 3s ease-in-out infinite; }
-
-@keyframes scanLine {
-  0%   { top: -2px; opacity: 0; }
-  5%   { opacity: 1; }
-  95%  { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-
-@keyframes eventStreamIn {
-  from { opacity: 0; transform: translateX(-12px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-.event-stream-item { animation: eventStreamIn 0.35s ease forwards; }
-
-/* ─── Pulsing dot for live status indicators ─────────────────────────────── */
-@keyframes liveStatusPulse {
-  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 currentColor; }
-  50%       { opacity: 0.7; transform: scale(1.2); box-shadow: 0 0 8px 3px currentColor; }
-}
-.live-status-dot { animation: liveStatusPulse 1.5s ease-in-out infinite; }
-
-/* ─── Leaflet overlay pane fix for canvas layers ─────────────────────────── */
-.leaflet-overlay-pane canvas {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  pointer-events: none;
-}
-
+/* Consistent light-blue utility classes for custom components. */
+.poseidon-card { background:#fff; border:1px solid #c7e3f7; box-shadow:0 8px 24px rgba(45,111,150,.07); }
+.poseidon-card-soft { background:#f3faff; border:1px solid #d4eaf7; }
+.poseidon-primary { background:#4ea8de; color:white; }
+.poseidon-primary:hover { background:#3289bd; }
