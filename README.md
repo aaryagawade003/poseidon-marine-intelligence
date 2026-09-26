@@ -8,7 +8,45 @@
 
 Poseidon combines remote sensing, environmental forcing and historical AIS traffic into a single incident-reconstruction workflow. The objective is to move from **"a slick was observed"** to **"where could it have originated, how will it move, and which vessel trajectories are consistent with that origin window?"**.
 
-### Investigation flow
+## Run locally
+
+Poseidon has two services: a React frontend and a FastAPI backend. **Start both terminals** before using the investigation controls.
+
+### Terminal 1 — Backend
+
+From the repository root:
+
+```powershell
+cd C:\Users\Aarya\poseidon-marine-intelligence
+python -m pip install -r backend\requirements.txt
+python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
+```
+
+Verify it is running by opening:
+
+```text
+http://127.0.0.1:8000/api/health
+```
+
+You should receive a JSON health response.
+
+### Terminal 2 — Frontend
+
+```powershell
+cd C:\Users\Aarya\poseidon-marine-intelligence\frontend
+npm.cmd install
+npm.cmd run dev
+```
+
+Then open the Vite URL shown in the terminal, normally:
+
+```text
+http://localhost:5173
+```
+
+If PowerShell blocks `npm`, use `npm.cmd` as shown above.
+
+## Investigation flow
 
 ```text
 Satellite observation
@@ -32,48 +70,49 @@ Forward drift outlook + investigation report
 
 ## Core capabilities
 
-### 1. Slick Detection
-- Processes satellite-derived observations.
-- Delineates candidate slick regions.
-- Captures area, perimeter and principal dimensions.
-- Presents detection confidence and data-quality context.
+### Slick Detection
+- Satellite-derived slick observation
+- Slick geometry and dimensions
+- Detection confidence
+- Data-quality context
 
-### 2. Drift Reconstruction
-- Combines surface-current and wind information.
-- Reconstructs the slick backward from the observation time.
-- Estimates a probable release location and time window.
-- Projects a forward drift corridor with uncertainty.
+### Drift Reconstruction
+- Surface-current and wind forcing
+- Backward origin reconstruction
+- Estimated release time window
+- Forward drift corridor and uncertainty
 
-### 3. AIS Traffic Reconstruction
-- Rebuilds historical vessel movement around the reconstructed origin.
-- Filters irrelevant traffic using space and time constraints.
-- Compares vessel movement with the estimated drift corridor.
+### AIS Traffic Reconstruction
+- Historical vessel movement reconstruction
+- Space/time traffic filtering
+- Trajectory comparison against the reconstructed origin
 
-### 4. Vessel Attribution Evidence
-Candidate vessels are examined using multiple signals:
+### Vessel Correlation Evidence
+Candidates are examined using multiple signals:
 
-- Distance from reconstructed origin
-- Temporal overlap with the release window
-- Heading / trajectory compatibility
-- Speed or movement anomalies
-- Vessel-context relevance
+- Spatial proximity
+- Temporal alignment
+- Trajectory compatibility
+- Behavioural movement signal
+- Environmental compatibility
 
-The resulting confidence is an **analytical decision-support signal**, not proof of responsibility or legal liability.
+The result is an analytical decision-support signal, not proof of responsibility or legal liability.
 
-### 5. Investigation Workspace
-The frontend is intentionally organized as one incident workflow rather than separate application modes:
+### Investigation Workspace
+Poseidon uses one unified incident workflow rather than separate application modes:
 
-- Incident Workspace
+- Incident Overview
 - Evidence Fusion
-- Source Data
-- Reconstruct Incident
-- Slick Detection
-- Slick Profile
-- Traffic Reconstruction
-- Origin Trace
-- Drift Outlook
-- Model Checks
+- Observation Sources
+- Incident Reconstruction
+- Slick Characterization
+- Slick Geometry
+- AIS Traffic Review
+- Release Origin
+- Drift Projection
+- Model Diagnostics
 - Incident Archive
+- Data Services
 
 ## Architecture
 
@@ -89,7 +128,7 @@ Poseidon Incident Workspace
       └── AIS traffic analysis
               │
               ▼
-       FastAPI backend
+       FastAPI backend :8000
               │
       ┌───────┼────────┐
       ▼       ▼        ▼
@@ -100,20 +139,9 @@ Poseidon Incident Workspace
        Incident evidence
 ```
 
-## Frontend
+## Backend health indicator
 
-```powershell
-cd frontend
-npm install
-npm run dev
-```
-
-## Backend
-
-```powershell
-pip install -r requirements.txt
-uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
-```
+The frontend checks `GET /api/health` when it starts and every 30 seconds. The top-right **BACKEND ONLINE/OFFLINE** indicator can also be clicked to retry the connection. This makes a missing backend immediately visible instead of making investigation buttons appear unresponsive.
 
 ## Project structure
 
@@ -123,13 +151,6 @@ frontend/
     components/       # map layers and investigation UI
     context/          # incident state and workflow
     pages/            # investigation workflow pages
-      IncidentWorkspace.jsx
-      SpillDetectionPage.jsx
-      SpillGeometryPage.jsx
-      AISInvestigationPage.jsx
-      OriginBacktrackingPage.jsx
-      FuturePredictionPage.jsx
-      InvestigationCopilotPage.jsx
 backend/
   adapters/           # data-source adapters
   integrations/       # satellite, ocean, weather and AIS integrations
